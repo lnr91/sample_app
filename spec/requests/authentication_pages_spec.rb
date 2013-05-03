@@ -42,4 +42,46 @@ describe "signin" do
       end
 end
 
+describe "authorisation" do
+
+    describe "for non signed in users" do
+        let(:user) {FactoryGirl.create(:user)}
+       describe "in the Users controller" do
+         describe "visiting the edit page" do
+           before { visit edit_user_path(user) }
+           it { should have_selector('title', text: 'Sign in') }
+           describe "after signing in" do
+           before do
+             fill_in "Email", with: user.email
+           fill_in "Password", with: user.password
+           click_button "Sign in"
+           end
+           it {should have_selector('title', text:'Edit user')}
+           end
+           end
+         describe "submitting to the update action" do
+           before { put user_path(user) }
+           specify { response.should redirect_to(signin_path) }
+         end
+
+         describe "visiting the user index" do
+           before {visit users_path}
+           it {should have_selector('title', text:'Sign in')}
+         end
+       end
+    end
+    describe "for wrong user" do
+      let(:user) {FactoryGirl.create(:user)}
+      let(:wrong_user) {FactoryGirl.create(:user,email:"wrong@example.com")}
+      before {sign_in user}
+      describe "Going to User#edit action" do
+        it {should_not have_selector('title',text: full_title('Edit user'))}
+      end
+      describe "submitting PUT request to Users#update action" do
+        before {put user_path(wrong_user)}
+        specify {response.should redirect_to(root_path)}
+      end
+    end
+  end
+
 end
