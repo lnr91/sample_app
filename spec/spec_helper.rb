@@ -29,4 +29,9 @@ RSpec.configure do |config|
   # automatically. This will be the default behavior in future versions of
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
+
+  # I am adding this on my own...just to see what happens
+  config.color_enabled = true
+  # This describes the tests in more detailed manner
+  #config.formatter     = 'documentation'
 end

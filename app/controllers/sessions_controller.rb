@@ -8,7 +8,7 @@ def create
 	if user && user.authenticate(params[:session][:password]) # here authenticate is a function provided to us by has_secure_password (inbuilt fn) defined(not decribed) in User model
 	# sign  the user in and show him his profule page
 	sign_in user
-	redirect_to user # this calls users controller and calls show action ..same as user_path(user)
+	redirect_back_or user # this calls users controller and calls show action ..same as user_path(user)
     else
     	flash.now[:error]='Invalid email/password'
 	    render 'new'

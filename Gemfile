@@ -1,9 +1,12 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.13'
+gem 'faker', '1.0.1'
 gem 'bootstrap-sass','2.3.1.0'
 gem 'bcrypt-ruby', '3.0.1'
 gem 'factory_girl_rails', '1.4.0'
+gem 'will_paginate', '3.0.3'
+gem 'bootstrap-will_paginate', '0.0.6'
 gem 'annotate', '2.5.0', group: :development 
 
 # Bundle edge Rails instead:
