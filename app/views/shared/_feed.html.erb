@@ -1,0 +1,6 @@
+<% if @feed_items.any? %>
+<ol class="microposts" >
+	<%= render partial: 'shared/feed_item', collection: @feed_items %>  <! Notice how we used render @users in index.....that is because rails looks into @users collection...and determines the partial to use based on activ record model name found in collection . But here we need to use a different partial...so we use this longfrom   ->
+</ol>
+<%= will_paginate @feed_items %>
+<% end %>

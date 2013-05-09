@@ -22,6 +22,10 @@ describe "AuthenticationPages" do
         it { should_not have_selector('div.alert.alert-error', text: 'Invalid') }
       end
     end
+    describe "before signin" do
+      it {should_not have_link('Profile') }
+      it { should_not have_link('Settings') }
+    end
 
     describe "with valid information" do
       let(:user) { FactoryGirl.create(:user) }
@@ -60,13 +64,23 @@ describe "AuthenticationPages" do
            end
          describe "submitting to the update action" do
            before { put user_path(user) }
-           specify { response.should redirect_to(signin_path) }
+           specify {response.should redirect_to(signin_path) }
          end
 
          describe "visiting the user index" do
            before {visit users_path}
            it {should have_selector('title', text:'Sign in')}
          end
+      end
+      describe 'in microposts controller' do
+         describe "submitting to create action" do
+          before {post microposts_path}
+           specify { response.should redirect_to signin_path }
+        end
+        describe "submitting to destroy action" do
+          before {delete micropost_path(FactoryGirl.create(:micropost))}
+           specify {response.should redirect_to(signin_path) }
+        end
       end
     end
     describe "for wrong user" do
