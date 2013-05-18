@@ -1,0 +1,7 @@
+<%= form_for(current_user.relationships.build(followed_id: @user.id), remote: true) do |f| %>
+ <div>
+   <%= f.hidden_field :followed_id    %>   <!-- # here even if i dont specify value: @user.id , it is auto..getting set...how does that happen ? -->
+ <!--So when u change :followed_id to :followed_id1..it shows an error if u dont specify value...so it is taking inbuilt method of relationship model class-->
+ </div>
+<%= f.submit "Follow", class: "btn btn-large btn-primary" %>
+<% end %>

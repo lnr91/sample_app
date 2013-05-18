@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-  before_filter :signed_in_user  , only: [:edit, :update, :index, :destroy]
+  before_filter :signed_in_user  , only: [:edit, :update, :index, :destroy, :followers, :following]
   before_filter :unsigned_in_user, only: [:create, :new]
   before_filter  :correct_user , only: [:edit, :update]
   before_filter :admin_user, only: :destroy
@@ -48,6 +48,20 @@ class UsersController < ApplicationController
    User.find(params[:id]).destroy    # Here this destroy method is inbuilt method of Active record used to del a row
    flash[:success]="User destroyed"
    redirect_to users_path
+  end
+
+  def following
+    @title='Following'
+    @user=User.find(params[:id])  # this id corresponds to which user ? present user or user whose profile is clicked on ?..like /users/1...
+   @users= @user.followed_users.paginate(page: params[:page])
+    render 'show_follow'
+  end
+
+  def followers
+    @title='Followers'
+    @user=User.find(params[:id])
+    @users = @user.followers.paginate(page: params[:page])
+    render 'show_follow'
   end
 
   private

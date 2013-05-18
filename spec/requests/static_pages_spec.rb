@@ -43,8 +43,32 @@ describe "Static pages" do
                page.should have_selector("li##{item.id}",text:item.content)
              end
            end
+           it {should have_selector("span.count",text: "#{user.microposts.count} microposts")}
+           describe 'follower/following counts' do
+             let(:other_user) {FactoryGirl.create(:user)}
+             before do
+               other_user.follow!(user)
+               visit root_path
+             end
+             it {should have_link('0 following',href: following_user_path(user))}
+             it {should have_link('1 followers',href: followers_user_path(user))}
+           end
          end
+         describe "pagination of microposts" do
+          let(:user) {FactoryGirl.create(:user)}
+          before do
+            31.times {FactoryGirl.create(:micropost,user: user)}
+            sign_in user
+            visit root_path
+          end
+          it {should have_selector("div.pagination")}
+          it "should show each micropost " do
+        user.feed.paginate(page: 1).each do |feed_item|
+        page.should have_selector('li', text: feed_item.content) 
+      end
     end
+  end
+  end
   describe "Help page" do
     before { visit help_path }
     it_should_behave_like "all static pages"
@@ -66,4 +90,5 @@ describe "Static pages" do
     let(:page_title) { 'Contact' }
     it_should_behave_like "all static pages"
   end
-end
+
+  end

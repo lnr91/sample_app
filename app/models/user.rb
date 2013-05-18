@@ -12,6 +12,12 @@
 class User < ActiveRecord::Base
 attr_accessible :name, :email, :password, :password_confirmation
 has_many :microposts, dependent: :destroy
+has_many :relationships, :foreign_key => 'follower_id', dependent: :destroy
+has_many :followed_users, through: :relationships, source: :followed
+has_many :reverse_relationships, :foreign_key => 'followed_id',class_name: 'Relationship'
+#here we include class name in association..otherwise rails will look for ReverseRelationships class
+has_many :followers, through: :reverse_relationships, source: :follower  # Here there is non need for source: :follower
+                                                             #bcos it has same name as in relationships table..refer pg 618
 has_secure_password
 validates :name, presence: true, length: { maximum: 49 }
 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -22,11 +28,19 @@ before_save {self.email.downcase!}  # same as ->  before_save { |user| user.emai
 before_save {create_remember_token }
 
 def feed
-	Micropost.where('user_id=?',id)   # From where did we get this id ???....DOUBT..oh ok..id is created by default
-	                                  # here user_id refers to foreign key in Micropost user model
-	                                  #this is a model object and it has access to its id...like @user.feed
-	                                  # so id of that particular user.....cool
-	                                  # Also...u can write it as  def feed;microposts;end
+  Micropost.from_users_followed(self)
+end
+
+def follow!(other_user)
+  self.relationships.create!(followed_id: other_user.id)  #can also write relationships.create!(followed_user: other_user)
+end
+
+def unfollow!(other_user)
+ self.relationships.find_by_followed_id(other_user.id).destroy
+end
+
+def following?(other_user)
+  self.relationships.find_by_followed_id(other_user.id)
 end
 
 private 
