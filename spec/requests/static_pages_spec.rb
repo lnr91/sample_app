@@ -53,6 +53,15 @@ describe "Static pages" do
              it {should have_link('0 following',href: following_user_path(user))}
              it {should have_link('1 followers',href: followers_user_path(user))}
            end
+
+           describe "replies must show up in feed" do
+             let(:other_user) { FactoryGirl.create(:user) }
+             before do
+               FactoryGirl.create(:micropost, user: other_user, content: "@#{user.nick_name} how are you")
+               visit root_path
+             end
+             it {should have_content(other_user.microposts.first.content)}
+           end
          end
          describe "pagination of microposts" do
           let(:user) {FactoryGirl.create(:user)}

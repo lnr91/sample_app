@@ -12,7 +12,7 @@
 require 'spec_helper'
 
 describe User do
- before { @user = User.new(name:"John Doe", email: "john@doe.com",password: "foobar", password_confirmation: "foobar")}
+ before { @user = User.new(name:"John Doe", nick_name: "johnny", email: "john@doe.com",password: "foobar", password_confirmation: "foobar")}
  subject {@user}
  it {should respond_to(:name)}
  it {should respond_to(:email)}
@@ -36,7 +36,12 @@ describe User do
  describe "when name is not present" do
 	before {@user.name=" "}
 	it {should_not be_valid}
-end
+ end
+
+ describe "when nick name is not present" do
+   before {@user.nick_name=" "}
+   it {should_not be_valid}
+ end
 describe "when email is not present" do
 before { @user.email = " " }
 it { should_not be_valid }
@@ -45,6 +50,11 @@ describe "when name is too long" do
 	before {@user.name="a"*50}
 	it {should_not be_valid}
 end
+
+ describe "when nick name is too long" do
+   before {@user.nick_name="a"*50}
+   it {should_not be_valid}
+ end
 
 describe "When emai; addresses are invalid" do
 	it "User should be invalid" do

@@ -10,7 +10,7 @@
 #
 
 class User < ActiveRecord::Base
-attr_accessible :name, :email, :password, :password_confirmation
+attr_accessible :name, :email, :password, :password_confirmation,:nick_name
 has_many :microposts, dependent: :destroy
 has_many :relationships, :foreign_key => 'follower_id', dependent: :destroy
 has_many :followed_users, through: :relationships, source: :followed
@@ -20,6 +20,7 @@ has_many :followers, through: :reverse_relationships, source: :follower  # Here 
                                                              #bcos it has same name as in relationships table..refer pg 618
 has_secure_password
 validates :name, presence: true, length: { maximum: 49 }
+validates :nick_name, presence: true, length: { maximum: 49 }, uniqueness: { case_sensitive: false }
 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 validates :email, presence: true,format: { with: VALID_EMAIL_REGEX },uniqueness: { case_sensitive: false }
 validates :password, presence: true, length: { minimum: 6 }
@@ -28,7 +29,7 @@ before_save {self.email.downcase!}  # same as ->  before_save { |user| user.emai
 before_save {create_remember_token }
 
 def feed
-  Micropost.from_users_followed(self)
+  Micropost.from_users_followed_including_replies(self)
 end
 
 def follow!(other_user)
