@@ -42,4 +42,14 @@ silence_warnings do
 BCrypt::Engine::DEFAULT_COST = BCrypt::Engine::MIN_COST
 end
 
+  config.action_mailer.smtp_settings = {
+      :address => "smtp.gmail.com",
+      :port => 587,
+      :authentication => :plain,
+      :enable_starttls_auto => true,
+      :user_name => "simhaece@gmail.com",
+      :password => "paulgraham.net"
+  }
+
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 end
