@@ -6,7 +6,9 @@ class RelationshipsController < ApplicationController
   @user= User.find(params[:relationship][:followed_id])
   current_user.follow!(@user)
 
-  UserMailer.new_follower(@user,current_user).deliver
+  if(@user.email_activated)
+    UserMailer.new_follower(@user,current_user).deliver
+  end
   respond_to do |format|
   format.html { redirect_to @user }   # eqvlnt to redirect_to user_path(@user)
   format.js

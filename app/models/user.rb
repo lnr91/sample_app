@@ -27,6 +27,7 @@ validates :password, presence: true, length: { minimum: 6 }
 validates :password_confirmation, presence: true
 before_save {self.email.downcase!}  # same as ->  before_save { |user| user.email = email.downcase }
 before_save {create_remember_token }
+before_create{ create_email_token}
 
 def feed
   Micropost.from_users_followed_including_replies(self)
@@ -49,5 +50,9 @@ private
   	self.remember_token = SecureRandom.urlsafe_base64  # If u just say remember_token= ...   then local variable 
   	                                                   # remember_token is created...If u want to access table column
   	                                                   #remember_token...u need to use self.remem...
-end
+    end
+
+    def create_email_token
+      self.email_token =   SecureRandom.urlsafe_base64
+    end
 end

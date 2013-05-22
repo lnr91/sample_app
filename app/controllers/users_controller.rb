@@ -13,7 +13,7 @@ class UsersController < ApplicationController
   end
 
   def show
-  	@user=User.find(params[:id])
+    @user=User.find(params[:id])
     @microposts= @user.microposts.paginate(page: params[:page])   # same as paginate(:page=>params[:page])
   end
 
@@ -37,6 +37,7 @@ class UsersController < ApplicationController
   if @user.save
     sign_in @user
     flash[:success] = "Welcome to the Sample App!"
+    UserMailer.registration_confirmation(@user).deliver
   	redirect_to @user
   else
   	render 'new'
@@ -62,6 +63,15 @@ class UsersController < ApplicationController
     @user=User.find(params[:id])
     @users = @user.followers.paginate(page: params[:page])
     render 'show_follow'
+  end
+
+  def activate_email
+    @user=User.find_by_email_token(params[:email_token])
+
+    @user.update_attribute(:email_activated,true)
+    sign_in @user
+    flash[:success]= "Your email has been activated"
+    redirect_to @user
   end
 
   private

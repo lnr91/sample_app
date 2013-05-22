@@ -1,0 +1,5 @@
+
+<body>
+Please click on the following link to activate your email
+<%= link_to "Activate",activate_email_users_url(email_token: @user.email_token), method: :put %>
+</body>
