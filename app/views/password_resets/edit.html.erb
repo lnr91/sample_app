@@ -1,0 +1,13 @@
+<% provide(:title, "Reset password") %>
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@user, url: password_reset_path(params[:id])) do |f| %>
+      <%= render "shared/error_messages", object: f.object %>
+    <%= f.label :password %>
+    <%= f.text_field :password %>
+    <%= f.label :password_confirmation %>
+    <%= f.text_field :password_confirmation %>
+    <%= f.submit "Reset password", class:"btn btn-large btn-primary" %>
+    <% end %>
+   </div>
+</div>
