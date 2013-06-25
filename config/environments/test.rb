@@ -47,8 +47,8 @@ end
       :port => 587,
       :authentication => :plain,
       :enable_starttls_auto => true,
-      :user_name => "simhaece@gmail.com",
-      :password => "paulgraham.net"
+      :user_name => "Enter your email",
+      :password => "password"
   }
 
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
