@@ -70,8 +70,8 @@ SampleApp::Application.configure do
       :port => 587,
       :authentication => :plain,
       :enable_starttls_auto => true,
-      :user_name => "simhaece@gmail.com",
-      :password => "paulgraham.net"
+      :user_name => "Enter your email id",
+      :password => "password"
   }
 
   config.action_mailer.default_url_options = { :host => 'murmuring-lake-2373.herokuapp.com' }
