@@ -40,7 +40,7 @@ SampleApp::Application.configure do
       :port => 587,
       :authentication => :plain,
       :enable_starttls_auto => true,
-      :user_name => "email@gmail.com",
+      :user_name => "Enter your email",
       :password => "password"
   }
 
